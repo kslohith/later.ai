@@ -1,10 +1,10 @@
 from flask import Flask, request, jsonify
 from pymongo.server_api import ServerApi
 from pymongo.mongo_client import MongoClient
-from backend.new_approach import insert_data
-from backend.get_relevant_data import get_data
-from backend.intel_rag import intel_rag
-from backend.get_tags import tag_generate
+from new_approach import insert_data
+from get_relevant_data import get_data
+from intel_rag import intel_rag
+from get_tags import tag_generate
 
 app = Flask(__name__)
 uri = "mongodb+srv://admin:admin@cluster0.ul6ugs0.mongodb.net/?retryWrites=true&w=majority"

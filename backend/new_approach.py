@@ -2,7 +2,6 @@ import os
 from langchain.text_splitter import CharacterTextSplitter
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-import pandas as pd
 from langchain_community.embeddings.openai import OpenAIEmbeddings
 from langchain_community.vectorstores import MongoDBAtlasVectorSearch
 from langchain_community.document_loaders import DirectoryLoader
