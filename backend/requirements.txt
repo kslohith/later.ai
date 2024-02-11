@@ -1,0 +1,7 @@
+flask
+pymongo
+openai
+keybert
+predictionguard
+langchain
+langchain_community
