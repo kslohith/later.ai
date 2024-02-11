@@ -12,6 +12,7 @@ import nltk
 
 app = Flask(__name__)
 CORS(app)
+nltk.download('punkt')
 uri = "mongodb+srv://admin:admin@cluster0.ul6ugs0.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(uri, server_api=ServerApi('1'))
 dbName = "documents"
@@ -45,4 +46,4 @@ def get_saved_notes():
     return relevant_data
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host='0.0.0.0', port=5000)
