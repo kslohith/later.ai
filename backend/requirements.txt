@@ -6,3 +6,4 @@ predictionguard
 langchain
 langchain_community
 nltk
+json

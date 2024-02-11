@@ -6,6 +6,8 @@ from get_relevant_data import get_data
 from intel_rag import intel_rag
 from get_tags import tag_generate
 from backup_tags import backup_tags
+from get_data import retrieve_data_from_mongodb_by_tags
+import json
 
 app = Flask(__name__)
 uri = "mongodb+srv://admin:admin@cluster0.ul6ugs0.mongodb.net/?retryWrites=true&w=majority"
@@ -32,6 +34,12 @@ def get_tags():
     query = request.json['query']
     # relevant_data = tag_generate(query)
     relevant_data = backup_tags(query)
+    return relevant_data
+
+@app.route('/getSavedNotes/', methods=['GET'])
+def get_saved_notes():
+    # relevant_data = tag_generate(query)
+    relevant_data = retrieve_data_from_mongodb_by_tags(collection)
     return relevant_data
 
 if __name__ == '__main__':
