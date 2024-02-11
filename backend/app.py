@@ -7,9 +7,10 @@ from intel_rag import intel_rag
 from get_tags import tag_generate
 from backup_tags import backup_tags
 from get_data import retrieve_data_from_mongodb_by_tags
-import json
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 uri = "mongodb+srv://admin:admin@cluster0.ul6ugs0.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(uri, server_api=ServerApi('1'))
 dbName = "documents"
