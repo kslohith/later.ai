@@ -8,6 +8,7 @@ from get_tags import tag_generate
 from backup_tags import backup_tags
 from get_data import retrieve_data_from_mongodb_by_tags
 from flask_cors import CORS
+import nltk
 
 app = Flask(__name__)
 CORS(app)
@@ -44,4 +45,4 @@ def get_saved_notes():
     return relevant_data
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5001)
