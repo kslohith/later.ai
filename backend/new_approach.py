@@ -5,21 +5,46 @@ from pymongo.server_api import ServerApi
 from langchain_community.embeddings.openai import OpenAIEmbeddings
 from langchain_community.vectorstores import MongoDBAtlasVectorSearch
 from langchain_community.document_loaders import DirectoryLoader
+from openai import OpenAI
+from nltk.tokenize import sent_tokenize
 
-def insert_data(content, collection):
+def insert_data(content, tags, collection):
 
-    text_splitter = CharacterTextSplitter(chunk_size=700, chunk_overlap=50)
-    docs = text_splitter.split_text(content)
-    embeddings = OpenAIEmbeddings(openai_api_key=os.getenv('openai_secret'))
+    os.environ['OPENAI_API_KEY'] = os.getenv('openai_secret')
+    client = OpenAI()
+    sentences = sent_tokenize(content)
+    chunks = []
+    current_chunk = ""
+    current_chunk_size = 0
+    chunk_size = 700
+    for sentence in sentences:
+        # Check if adding the sentence would exceed the chunk size
+        if current_chunk_size + len(sentence) <= chunk_size:
+            current_chunk += sentence + " "
+            current_chunk_size += len(sentence)
+        else:
+            # Add the current chunk to the list and start a new chunk
+            chunks.append(current_chunk.strip())
+            current_chunk = sentence + " "
+            current_chunk_size = len(sentence)
+    if current_chunk:
+        chunks.append(current_chunk.strip())
 
+    data = []
 
-    def write_string_to_text_file(string, file_path):
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
-        with open(file_path, 'w') as file:
-            file.write(string)
+    for items in chunks:
+        print(items)
+        print("-----------")
+        response = client.embeddings.create(
+        input=items,
+        model="text-embedding-ada-002"
+        )
+        new_data = {}
+        new_data["text"] = items
+        new_data["tags"] = tags
+        new_data["embedding"] = response.data[0].embedding
+        data.append(new_data)
 
-    for items in docs:
-        write_string_to_text_file(items,"./temp/temp_file.txt")
-        loader = DirectoryLoader( './temp', glob="./*.txt", show_progress=True)
-        data = loader.load()
-        MongoDBAtlasVectorSearch.from_documents( data, embeddings, collection=collection )   
+    collection.insert_many(data)
+        
+

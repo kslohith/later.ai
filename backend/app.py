@@ -5,6 +5,7 @@ from new_approach import insert_data
 from get_relevant_data import get_data
 from intel_rag import intel_rag
 from get_tags import tag_generate
+from backup_tags import backup_tags
 
 app = Flask(__name__)
 uri = "mongodb+srv://admin:admin@cluster0.ul6ugs0.mongodb.net/?retryWrites=true&w=majority"
@@ -16,7 +17,8 @@ collection = client[dbName][collectionName]
 @app.route('/saveNotes/', methods=['POST'])
 def save_notes():
     data = request.json['data']
-    insert_data(data, collection=collection)
+    tags = request.json['tags']
+    insert_data(data, tags, collection=collection)
     return jsonify({"message": 'Successfully inserted data'})
 
 @app.route('/searchNotes/', methods=['POST'])
@@ -28,7 +30,8 @@ def search_notes():
 @app.route('/getTags/', methods=['POST'])
 def get_tags():
     query = request.json['query']
-    relevant_data = tag_generate(query)
+    # relevant_data = tag_generate(query)
+    relevant_data = backup_tags(query)
     return relevant_data
 
 if __name__ == '__main__':
